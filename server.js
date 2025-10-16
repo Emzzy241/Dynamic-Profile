@@ -16,10 +16,6 @@ const USER_PROFILE = {
     stack: "Node.js/Express"
 };
 
-// const getACatFact 
-
-
-
 app.use(express.json());
 
 app.use(cors());
