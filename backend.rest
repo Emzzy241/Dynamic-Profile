@@ -3,3 +3,13 @@ GET http://localhost:8000
 ###
 
 GET http://localhost:8000/me
+
+### Testing Cat Facts API
+GET https://catfact.ninja/fact
+
+### Testing cat facts endpoint
+GET http://localhost:8000/test-cats
+
+### Testing the cat facts endpoint with the remaining code snippet.
+
+GET http://localhost:8000/me
