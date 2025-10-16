@@ -1,9 +1,5 @@
 GET http://localhost:8000
 
-###
-
-GET http://localhost:8000/me
-
 ### Testing Cat Facts API
 GET https://catfact.ninja/fact
 

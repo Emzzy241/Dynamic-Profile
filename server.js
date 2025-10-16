@@ -5,14 +5,8 @@ import * as dotenv from "dotenv";
 dotenv.config()
 
 const app = express()
-// const PORT = process.env.PORT
 const PORT = process.env.PORT
 
-const currentTime = new Date();
-const hours = currentTime.getHours();
-const minutes = currentTime.getMinutes();
-const seconds = currentTime.getSeconds();
-const milliseconds = currentTime.getMilliseconds();
 
 const CAT_FACT_API_URL = "https://catfact.ninja/fact";
 
@@ -30,14 +24,6 @@ app.use(express.json());
 
 app.use(cors());
 app.use(express.json())
-
-try {
-    // mongoose.connect(process.env.MONGO_URI)
-    console.log("Database Connected!!!");
-} catch (error) {
-    console.log(error)
-}
-
 
 
 app.get("/", async (req, res) => {
@@ -68,19 +54,6 @@ app.get("/test-cats", async (req, res) => {
     }
 })
 
-// app.get("/me", async (req, res) => {
-//     // res.status(200).send("Welcome to the ME Endpoint")
-//     res.status(200).json({
-//         status: "success",
-//         user: {
-//             "email": "emzzyoluwole@gmail.com",
-//             "stack": "Node.js/Express"
-//         },
-//         timestamp: `${hours}:${minutes}:${seconds}:${milliseconds}`,
-//         fact: "A random cat fact from Cat Facts API"
-//     })
-//     console.log("Welcome to the ME Endpoint and its time to learn a whole lot about me")
-// })
 
 app.get("/me", async (req, res) => {
     console.log(`Received request for the /me profile endpoint at ${new Date().toISOString()}`)
