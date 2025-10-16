@@ -1,52 +1,3 @@
-// import { timeStamp } from 'node:console';
-// import http from 'node:http'; // Use 'node:http' for native modules
-// import { json } from 'express';
-
-// const currentTime = new Date();
-// const hours = currentTime.getHours();
-// const minutes = currentTime.getMinutes();
-// const seconds = currentTime.getSeconds();
-// const milliseconds = currentTime.getMilliseconds();
-
-// const server = http.createServer((req, res) => {
-//     // The (req, res) parameters are correctly passed to this function.
-//     // res is defined here and has the .end() method.
-
-
-//     if (req.url === '/') {
-//         res.writeHead(200, { 'Content-Type': 'text/plain' });
-//         res.end('Welcome to the Root Path');
-//     }
-//     else if (req.url === '/me') {
-//         res.writeHead(200, { 'Content-Type': 'text/plain' });
-//         res.json({
-//             status: "success",
-//             user: {
-//                 "email": "emzzyoluwole@gmail.com",
-//                 "name": "Dynasty",
-//                 "stack": "nodejs"
-//             },
-//             "timeStamp": `${hours}:${minutes}:${seconds}:${milliseconds}`,
-//             "fact": "A random cat fact from Cat Facts API"
-//         })
-//         // res.end("Welcome to MY Profile, I am daaaaaaaaaaaaaaaaaaaa best in the world!!!!!")
-//     }
-//     else {
-//         res.writeHead(404, { 'Content-Type': 'text/plain' });
-//         res.end('404 Not Found');
-//     }
-// });
-
-// const PORT = 8000;
-// server.listen(PORT, () => {
-
-
-//     console.log("Full Date Object:", currentTime);
-
-//     console.log(`Server is listening on port ${PORT}`);
-// });
-
-
 import express, { json } from "express";
 import cors from "cors"
 import * as dotenv from "dotenv";
@@ -65,6 +16,12 @@ const milliseconds = currentTime.getMilliseconds();
 
 const CAT_FACT_API_URL = "https://catfact.ninja/fact";
 
+const USER_PROFILE = {
+    email: "emzzyoluwole@gmail.com",
+    name: "Mojiboye Emmanuel Oluwole",
+    stack: "Node.js/Express"
+};
+
 // const getACatFact 
 
 
@@ -81,9 +38,7 @@ try {
     console.log(error)
 }
 
-app.listen(PORT || 8000, () => {
-    console.log(`Server running on port ${PORT}`)
-});
+
 
 app.get("/", async (req, res) => {
     res.status(200).send("Welcome to the Root Path")
@@ -128,52 +83,40 @@ app.get("/test-cats", async (req, res) => {
 // })
 
 app.get("/me", async (req, res) => {
+    console.log(`Received request for the /me profile endpoint at ${new Date().toISOString()}`)
+
+    let dynamicFact = "Cat Fact API unavailable. Please check the network connection.";
+
 
     try {
         const response = await fetch(CAT_FACT_API_URL);
 
         if (!response.ok) {
-            console.error("There was an External API Error with status: " + error.message);
+            console.error(`There was an External API Error with status: ${response.status}`)
             return res.status(502).json({
-                error: "Failed t retrieve data from the external API",
+                error: "Failed to retrieve data from the external API",
                 status: response.status
             });
         }
-        const catFactData = await response.json();
-        // res.json(catFactData);
-        res.status(200).json({
-            status: "success",
-            user: {
-                "email": "emzzyoluwole@gmail.com",
-                "name": "Mojiboye Emmanuel Oluwole",
-                "stack": "Node.js/Express"
-            },
-            timestamp: `${hours}:${minutes}:${seconds}:${milliseconds}`,
-            fact: catFactData
-        })
+        else {
+            const catFactData = await response.json()
+            dynamicFact = catFactData.fact
+        }
     } catch (error) {
         console.error("An error occurred while trying to get a cat fact." + error.message);
-        res.status(500).json({
-            error: "There was a server error while fetching a cat fact."
-        })
-
     }
-    // res.status(200).json({
-    //     status: "success",
-    //     user: {
-    //         "email": "emzzyoluwole@gmail.com",
-    //         "stack": "Node.js/Express"
-    //     },
-    //     timestamp: `${hours}:${minutes}:${seconds}:${milliseconds}`,
-    //     fact: catFactData
-    // })
+
+    const currentTimestamp = new Date().toISOString();
+
+    res.status(200).json({
+        status: "success",
+        user: USER_PROFILE,
+        timestamp: currentTimestamp,
+        fact: dynamicFact
+    })
 })
 
-// user: {
-//                 "email": "emzzyoluwole@gmail.com",
-//                 "name": "Dynasty",
-//                 "stack": "nodejs"
-//             },
-//             "timeStamp": `${hours}:${minutes}:${seconds}:${milliseconds}`,
-//             "fact": "A random cat fact from Cat Facts API"
-//         
+app.listen(PORT || 8000, () => {
+    console.log(`\nServer running on port ${PORT}`)
+    console.log(`Test the /me endpoint at: http://localhost:${PORT}/me`)
+});
