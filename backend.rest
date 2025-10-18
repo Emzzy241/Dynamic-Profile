@@ -1,3 +1,4 @@
+# Testing the root route
 GET http://localhost:8000
 
 ### Testing Cat Facts API
